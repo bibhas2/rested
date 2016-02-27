@@ -67,6 +67,14 @@
       margin-left: 4px;
       margin-top: 4px;
     }
+    select.body_type {
+      width: 0px;
+      height: 0px;
+      visibility: hidden;
+    }
+    a:visited {
+      color: blue;
+    }
     </style>
   </head>
   <body ng-app="RestedApp" ng-controller="MainController as main">
@@ -124,8 +132,18 @@
               </select>
               <input type="url" class="form-control url" placeholder="http://example.com">
               <button class="btn btn-large btn-primary">Go</button>
-
-              <ui-codemirror ui-codemirror-opts="main.responseEditorOptions" ng-model="main.selectedRequest.responseText"></ui-codemirror>
+              <div style="margin-left: 4px">
+                Body type:
+                <select id="bodyTypeSelect" ng-model="main.requestContentType" class="form-control body_type">
+                  <option>text/plain</option>
+                  <option>application/json</option>
+                  <option>application/xml</option>
+                  <option>text/xml</option>
+                  <option value="">None</option>
+                </select>
+                <a href ng-click="main.showBodyTypeMenu()">{{main.requestContentType === "" ? "None" : main.requestContentType}}</a>
+              </div>
+              <ui-codemirror ui-codemirror-opts="main.requestEditorOptions" ng-model="main.selectedRequest.responseText"></ui-codemirror>
             </div>
 
             <div>

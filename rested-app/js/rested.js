@@ -78,7 +78,25 @@ angular.module("RestedApp", ['ui.codemirror'])
 .controller("MainController", function($scope, $sce) {
   this.responseBodyFormat = "pretty";
   this.sidebarTab = "saved";
+  this.requestEditorOptions = {
+    lineWrapping : true,
+    lineNumbers: true,
+    theme: 'eclipse',
+    mode: ''
+  };
+  this.responseEditorOptions = {
+    lineWrapping : true,
+    lineNumbers: true,
+    theme: 'eclipse',
+    mode: ''
+  };
+  this.requestContentType = "";
   
+  this.showBodyTypeMenu = function() {
+    var event = document.createEvent("MouseEvents");
+    event.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+    document.getElementById("bodyTypeSelect").dispatchEvent(event);
+  }
   this.init = function() {
 
   }
