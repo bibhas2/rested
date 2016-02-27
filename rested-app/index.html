@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Boxy</title>
+    <title>Rested</title>
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="../css/photon.min.css">
@@ -44,7 +44,7 @@
       font-weight: bold;
     }
     pre.raw_view {
-      height: 55vh;
+      height: 45vh;
       font-weight: bold;
       font-size: 14pt;
       -webkit-user-select: text;
@@ -54,7 +54,7 @@
     .CodeMirror {
       font-weight: bold;
       font-size: 14pt;
-      height: 55vh;
+      height: 45vh;
     }
 
     </style>
@@ -63,9 +63,15 @@
     <div class="window">
 
       <!-- .toolbar-header sits at the top of your app -->
-      <!-- <header class="toolbar toolbar-header">
-        <h1 class="title">Photon</h1>
-      </header> -->
+      <header class="toolbar toolbar-header">
+        <div class="toolbar-actions">
+          <div class="btn-group">
+            <button class="btn btn-default" title="Add a new server" ng-click="main.openNewServerDialog()">
+              <span class="icon icon-plus"></span>
+            </button>
+          </div>
+        <div>
+      </header>
 
       <!-- Your app's content goes inside .window-content -->
       <div class="window-content">
@@ -80,13 +86,6 @@
                   History
                 </div>
               </div>
-              <div class="toolbar-actions">
-                <div class="btn-group">
-                  <button class="btn btn-default" title="Add a new server" ng-click="main.openNewServerDialog()">
-                    <span class="icon icon-plus"></span>
-                  </button>
-                </div>
-              <div>
             </header>
             <nav class="nav-group">
               <h5 class="nav-group-title">Servers</h5>
@@ -98,43 +97,11 @@
           </div>
 
           <div class="pane">
-            <table>
-              <colgroup>
-                 <col span="1" style="width: 20%;">
-                 <col span="1" style="width: 50%;">
-                 <col span="1" style="width: 15%;">
-                 <col span="1" style="width: 15%;">
-              </colgroup>
-              <thead>
-                <tr>
-                  <th>When</th>
-                  <th>Path</th>
-                  <th>Status</th>
-                  <th>Response Time (ms)</th>
-                </tr>
-              </thead>
-            </table>
-            <div style="height:30vh;overflow-y:auto">
-              <table>
-                <colgroup>
-                   <col span="1" style="width: 20%;">
-                   <col span="1" style="width: 50%;">
-                   <col span="1" style="width: 15%;">
-                   <col span="1" style="width: 15%;">
-                </colgroup>
-                <tbody>
-                  <tr ng-repeat="req in main.selectedServer.requestList" ng-click="main.selectRequest(req)" ng-class="{selected: main.isRequestSelected(req)}">
-                    <td>{{req.formattedStartTime}}</td>
-                    <td>{{req.request.url}}</td>
-                    <td>{{req.response.statusCode}}</td>
-                    <td>{{req.duration}}</td>
-                  </tr>
-                </tbody>
-              </table>
+            <div>
+              <ui-codemirror ui-codemirror-opts="main.responseEditorOptions" ng-model="main.selectedRequest.responseText"></ui-codemirror>
             </div>
 
             <div>
-
               <header class="toolbar toolbar-header">
                 <h1 class="title">Response</h1>
 
