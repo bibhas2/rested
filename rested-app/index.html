@@ -44,7 +44,7 @@
       font-weight: bold;
     }
     pre.raw_view {
-      height: 45vh;
+      height: 38vh;
       font-weight: bold;
       font-size: 14pt;
       -webkit-user-select: text;
@@ -54,9 +54,19 @@
     .CodeMirror {
       font-weight: bold;
       font-size: 14pt;
-      height: 45vh;
+      height: 38vh;
     }
-
+    select.method {
+      width: 100px;
+      height: 32px;
+      margin-left: 4px;
+      margin-top: 4px;
+    }
+    input.url {
+      width: 75%;
+      margin-left: 4px;
+      margin-top: 4px;
+    }
     </style>
   </head>
   <body ng-app="RestedApp" ng-controller="MainController as main">
@@ -86,6 +96,13 @@
                   History
                 </div>
               </div>
+              <div class="toolbar-actions">
+                <div class="btn-group pull-right">
+                  <button class="btn btn-default" title="Add a new server" ng-click="main.openNewServerDialog()">
+                    <span class="icon icon-plus"></span>
+                  </button>
+                </div>
+              <div>
             </header>
             <nav class="nav-group">
               <h5 class="nav-group-title">Servers</h5>
@@ -98,6 +115,16 @@
 
           <div class="pane">
             <div>
+              <select class="form-control method">
+                <option>GET</option>
+                <option>POST</option>
+                <option>PUT</option>
+                <option>DELETE</option>
+                <option>HEAD</option>
+              </select>
+              <input type="url" class="form-control url" placeholder="http://example.com">
+              <button class="btn btn-large btn-primary">Go</button>
+
               <ui-codemirror ui-codemirror-opts="main.responseEditorOptions" ng-model="main.selectedRequest.responseText"></ui-codemirror>
             </div>
 

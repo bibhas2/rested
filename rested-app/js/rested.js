@@ -76,8 +76,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 angular.module("RestedApp", ['ui.codemirror'])
 .controller("MainController", function($scope, $sce) {
+  this.responseBodyFormat = "pretty";
+  this.sidebarTab = "saved";
+  
   this.init = function() {
-    
+
   }
 
   this.init(); //Initialize the controller.
