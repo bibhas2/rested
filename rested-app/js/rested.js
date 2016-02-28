@@ -50,7 +50,7 @@ angular.module("RestedApp", ['ui.codemirror'])
     "saved": []
   };
   this.responseBodyFormat = "pretty";
-  this.sidebarTab = "saved";
+  this.sidebarTab = "history";
   this.requestEditorOptions = {
     lineWrapping : true,
     lineNumbers: true,
@@ -392,7 +392,7 @@ angular.module("RestedApp", ['ui.codemirror'])
                 }
               },
               {
-                label: 'Save Project',
+                label: 'Save Project...',
                 accelerator: 'CmdOrCtrl+S',
                 click: () => {
                   if (this.project.file === undefined) {
