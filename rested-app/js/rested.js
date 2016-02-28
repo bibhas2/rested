@@ -341,7 +341,7 @@ angular.module("RestedApp", ['ui.codemirror'])
 
         this.loadProjectFile(paths[0]);
       });
-    });    
+    });
   }
 
   this.closeProject = function(onSuccess) {
@@ -411,6 +411,14 @@ angular.module("RestedApp", ['ui.codemirror'])
                   } else {
                     this.saveProjectFile();
                   }
+                }
+              },
+              {
+                label: 'Close Project',
+                click: () => {
+                  this.closeProject(() => {
+                    this.loadProjectFile();
+                  });
                 }
               },
             ]
