@@ -8,6 +8,7 @@ const clipboard = electron.clipboard;
 var fs = require('fs')
 var url = require('url');
 var http = require('http');
+const https = require('https');
 var Menu = remote.require('menu')
 var MenuItem = remote.require('menu-item')
 var jsonfile = require('jsonfile');
@@ -156,7 +157,9 @@ angular.module("RestedApp", ['ui.codemirror'])
     this.response.responseText = "";
     this.responseEditorOptions.mode = "";
 
-    this.ongoingRequest = http.request(httpOptions, (res) => {
+    var httpClient = u.protocol === "https:" ? https : http;
+
+    this.ongoingRequest = httpClient.request(httpOptions, (res) => {
       //Save the headers
       this.response.headers = res.headers;
 
