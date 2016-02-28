@@ -169,6 +169,7 @@ angular.module("RestedApp", ['ui.codemirror'])
 
       //Accumulate response body for textual data only.
       let contentType = res.headers["content-type"];
+      let matchedType = undefined;
 
       textTypesTable.some(typeItem => {
         if (contentType === undefined) {
@@ -178,13 +179,20 @@ angular.module("RestedApp", ['ui.codemirror'])
         if (contentType.startsWith(typeItem[0])) {
           this.responseEditorOptions.mode = typeItem[1];
           res.setEncoding("utf8"); //Convert text to utf-8.
-          res.on('data', (chunk) => {
-            this.response.responseText += chunk;
-          });
+          matchedType = typeItem;
+
           return true;
         }
 
         return false;
+      });
+
+      res.on('data', (chunk) => {
+        //Accumulate text only if we know how to show it.
+        //Else just discard it.
+        if (matchedType !== undefined) {
+          this.response.responseText += chunk;
+        }
       });
 
       res.on('end', () => {
@@ -223,7 +231,7 @@ angular.module("RestedApp", ['ui.codemirror'])
       this.response.headers = {};
       this.response.statusCode = undefined;
       this.response.statusMessage = "";
-      
+
       if (item !== undefined) {
         this.request = {
           url: item.url,
