@@ -82,6 +82,12 @@
     a:visited {
       color: blue;
     }
+    .http_status {
+      margin-right: 4px;
+    }
+    .http_status_error {
+      color: red;
+    }
     </style>
   </head>
   <body ng-app="RestedApp" ng-controller="MainController as main">
@@ -172,6 +178,7 @@
                 <h1 class="title">Response</h1>
 
                 <div class="toolbar-actions" align="center">
+                  <span class="http_status" ng-class="{http_status_error: main.response.statusCode >= 400}" ng-if="main.response.statusCode !== undefined"><b>Status: </b>{{main.response.statusCode}} {{main.response.statusMessage}}</span>
                   <div class="btn-group">
                     <button class="btn btn-default" ng-class="{active: main.responseBodyFormat == 'pretty'}" title="Show formatted body" ng-click="main.responseBodyFormat = 'pretty'">
                       <span class="icon icon-list"></span> &nbsp;Pretty

@@ -74,7 +74,9 @@ angular.module("RestedApp", ['ui.codemirror'])
   };
   this.response = {
     headers: {},
-    responseText: ""
+    responseText: "",
+    statusCode: undefined,
+    statusMessage: ""
   }
   this.ongoingRequest = undefined;
   this.selectedRequest = undefined;
@@ -162,6 +164,8 @@ angular.module("RestedApp", ['ui.codemirror'])
     this.ongoingRequest = httpClient.request(httpOptions, (res) => {
       //Save the headers
       this.response.headers = res.headers;
+      this.response.statusCode = res.statusCode;
+      this.response.statusMessage = res.statusMessage;
 
       //Accumulate response body for textual data only.
       let contentType = res.headers["content-type"];
@@ -182,7 +186,6 @@ angular.module("RestedApp", ['ui.codemirror'])
 
         return false;
       });
-
 
       res.on('end', () => {
         this.ongoingRequest = undefined;
@@ -218,7 +221,9 @@ angular.module("RestedApp", ['ui.codemirror'])
       //Clear response.
       this.response.responseText = "";
       this.response.headers = {};
-
+      this.response.statusCode = undefined;
+      this.response.statusMessage = "";
+      
       if (item !== undefined) {
         this.request = {
           url: item.url,
