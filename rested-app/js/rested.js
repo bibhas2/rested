@@ -250,6 +250,10 @@ angular.module("RestedApp", ['ui.codemirror'])
       };
   }
 
+  this.clearHistory = function() {
+    this.project.history.length = 0;
+  }
+
   this.init = function() {
 
   }
