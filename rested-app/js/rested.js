@@ -105,6 +105,13 @@ angular.module("RestedApp", ['ui.codemirror'])
   }
   this.ongoingRequest = undefined;
 
+  var textTypesTable = [
+    ["application/xml", "xml"],
+    ["application/json", "javascript"],
+    ["text/html", "xml"],
+    ["text/json", "javascript"]
+  ];
+
   this.showBodyTypeMenu = function() {
     var event = document.createEvent("MouseEvents");
     event.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
@@ -113,11 +120,23 @@ angular.module("RestedApp", ['ui.codemirror'])
 
   this.commitRequest = function() {
     var u = url.parse(this.request.url);
+
+    //Fill in the protocol
+    if (u.protocol === null) {
+      this.request.url = "http://" + this.request.url;
+      u = url.parse(this.request.url);
+    }
+
     //console.log(u);
     if (this.request.contentType.length > 0) {
       this.request.headers["content-type"] = this.request.contentType;
     } else {
       delete this.request.headers["content-type"];
+    }
+    if (this.request.body.length > 0) {
+      this.request.headers["content-length"] = this.request.body.length;
+    } else {
+      delete this.request.headers["content-length"];
     }
 
     var httpOptions = {
@@ -128,23 +147,46 @@ angular.module("RestedApp", ['ui.codemirror'])
       method: this.request.method,
       headers: this.request.headers
     }
-    console.log(httpOptions);
 
-    var bodyAccumulator = [];
+    this.response.responseText = "";
+    this.responseEditorOptions.mode = "";
 
     this.ongoingRequest = http.request(httpOptions, (res) => {
-      res.on('data', (chunk) => {
-        bodyAccumulator += chunk;
+      //Save the headers
+      this.response.headers = res.headers;
+
+      //Accumulate response body for textual data only.
+      let contentType = res.headers["content-type"];
+
+      textTypesTable.some(typeItem => {
+        if (contentType === undefined) {
+          return true; //Break out.
+        }
+
+        if (contentType.startsWith(typeItem[0])) {
+          this.responseEditorOptions.mode = typeItem[1];
+          res.setEncoding("utf8"); //Convert text to utf-8.
+          res.on('data', (chunk) => {
+            this.response.responseText += chunk;
+          });
+          return true;
+        }
+
+        return false;
       });
+
+
       res.on('end', () => {
         this.ongoingRequest = undefined;
-        console.log(res);
+        //console.log(res);
+        $scope.$apply();
       });
     });
 
     this.ongoingRequest.on('error', (e) => {
       console.log(`problem with request: ${e.message}`);
       this.ongoingRequest = undefined;
+      $scope.$apply();
     });
 
     // write data to request body

@@ -130,7 +130,7 @@
                 <option>DELETE</option>
                 <option>HEAD</option>
               </select>
-              <input type="url" ng-model="main.request.url" class="form-control url" placeholder="http://example.com">
+              <input type="text" ng-model="main.request.url" class="form-control url" placeholder="http://example.com">
               <button class="btn btn-large btn-primary" ng-click="main.commitRequest()">Go</button>
               <div style="margin-left: 4px">
                 Body type:
@@ -152,10 +152,10 @@
 
                 <div class="toolbar-actions" align="center">
                   <div class="btn-group">
-                    <button class="btn btn-default" ng-class="{active: main.responseBodyFormat == 'pretty'}" title="Show formatted body" ng-click="main.setResponseBodyFormat('pretty')">
+                    <button class="btn btn-default" ng-class="{active: main.responseBodyFormat == 'pretty'}" title="Show formatted body" ng-click="main.responseBodyFormat = 'pretty'">
                       <span class="icon icon-list"></span> &nbsp;Pretty
                     </button>
-                    <button class="btn btn-default" ng-class="{active: main.responseBodyFormat == 'raw'}" title="Show raw body" ng-click="main.setResponseBodyFormat('raw')">
+                    <button class="btn btn-default" ng-class="{active: main.responseBodyFormat == 'raw'}" title="Show raw body" ng-click="main.responseBodyFormat = 'raw'">
                       <span class="icon icon-tools"></span> &nbsp;Raw
                     </button>
                   </div>
@@ -170,7 +170,7 @@
                 </div>
 
                 <div ng-if="main.showHeaders">
-                  <span class="http_header" ng-repeat="(key, value) in main.selectedRequest.response.headers">
+                  <span class="http_header" ng-repeat="(key, value) in main.response.headers">
                     <code class="header_name">{{key}}:</code> <code>{{value}}</code>
                   </span>
                 </div>
@@ -179,8 +179,8 @@
 
               <!-- Response data -->
               <div>
-                <ui-codemirror ui-codemirror-opts="main.responseEditorOptions" ng-model="main.selectedRequest.responseText" ng-if="main.responseBodyFormat == 'pretty'"></ui-codemirror>
-                <pre class="raw_view" ng-if="main.responseBodyFormat == 'raw'">{{main.selectedRequest.responseText}}</pre>
+                <ui-codemirror ui-codemirror-opts="main.responseEditorOptions" ng-model="main.response.responseText" ng-if="main.responseBodyFormat == 'pretty'"></ui-codemirror>
+                <pre class="raw_view" ng-if="main.responseBodyFormat == 'raw'">{{main.response.responseText}}</pre>
               </div>
             </div>
           </div>
