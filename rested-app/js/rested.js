@@ -213,6 +213,14 @@ angular.module("RestedApp", ['ui.codemirror'])
     this.ongoingRequest.end();
   }
 
+  this.cancelRequest = function() {
+    if (this.ongoingRequest === undefined) {
+      return;
+    }
+
+    this.ongoingRequest.abort();
+  }
+
   this.init = function() {
 
   }

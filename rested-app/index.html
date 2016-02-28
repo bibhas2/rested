@@ -131,7 +131,8 @@
                 <option>HEAD</option>
               </select>
               <input type="text" ng-model="main.request.url" class="form-control url" placeholder="http://example.com">
-              <button class="btn btn-large btn-primary" ng-click="main.commitRequest()">Go</button>
+              <button class="btn btn-large btn-primary" ng-if="main.ongoingRequest === undefined" ng-click="main.commitRequest()">Go</button>
+              <button class="btn btn-large btn-negative" ng-if="main.ongoingRequest !== undefined" ng-click="main.cancelRequest()">Cancel</button>
               <div style="margin-left: 4px">
                 Body type:
                 <select id="bodyTypeSelect" ng-model="main.request.contentType" ng-change="main.contentTypeChanged()" class="form-control body_type">
