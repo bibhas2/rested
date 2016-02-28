@@ -291,9 +291,9 @@ angular.module("RestedApp", ['ui.codemirror'])
         alert(`Filed to save settings: ${file}`);
         console.error(err);
       } else {
-        this.project.file = file;
+        this.project.file = this.project.file || file;
         this.project.dirty = false;
-
+        document.title = "Rested - " + (this.project.file || "Untitled");
         if (onSuccess !== undefined) {
           onSuccess();
         }
@@ -314,6 +314,8 @@ angular.module("RestedApp", ['ui.codemirror'])
         this.project = obj;
         this.project.file = file;
         this.project.dirty = false;
+        document.title = "Rested - " + (this.project.file || "Untitled");
+
         $scope.$apply();
       }
     });
