@@ -316,7 +316,7 @@ angular.module("RestedApp", ['ui.codemirror'])
         this.project.dirty = false;
         document.title = "Rested - " + (this.project.file || "Untitled");
         this.selectRequest(undefined);
-        
+
         $scope.$apply();
       }
     });
@@ -333,34 +333,42 @@ angular.module("RestedApp", ['ui.codemirror'])
   }
 
   this.showProjectOpenDialog = function() {
-    electron.dialog.showOpenDialog({title: "Open project"}, (paths) => {
-      if (paths === undefined || paths.length === 0) {
-        return;
-      }
+    this.closeProject(() => {
+      electron.dialog.showOpenDialog({title: "Open project"}, (paths) => {
+        if (paths === undefined || paths.length === 0) {
+          return;
+        }
 
-      this.loadProjectFile(paths[0]);
-    });
+        this.loadProjectFile(paths[0]);
+      });
+    });    
   }
 
-  this.quitApplication = function() {
+  this.closeProject = function(onSuccess) {
     if (this.project.dirty) {
       if (this.project.file === undefined) {
         //Save quietly
         this.saveProjectFile(undefined, () => {
-          app.quit();
+          onSuccess();
         });
       } else {
         if (confirm("Project has changed. Would you like to save?"))  {
           this.saveProjectFile(undefined, () => {
-            app.quit();
+            onSuccess();
           });
         } else {
-          app.quit();
+          onSuccess();
         }
       }
     } else {
-      app.quit();
+      onSuccess();
     }
+  }
+
+  this.quitApplication = function() {
+    this.closeProject(() => {
+      app.quit();
+    })
   }
 
   this.init = function() {
