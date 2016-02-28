@@ -242,17 +242,25 @@ angular.module("RestedApp", ['ui.codemirror'])
 
   this.selectRequest = function(item) {
       this.selectedRequest = item;
-      this.request = {
-        url: item.url,
-        body: item.body,
-        contentType: item.contentType,
-        method: item.method,
-        headers: item.headers
-      };
+      //Clear response.
+      this.response.responseText = "";
+      this.response.headers = {};
+
+      if (item !== undefined) {
+        this.request = {
+          url: item.url,
+          body: item.body,
+          contentType: item.contentType,
+          method: item.method,
+          headers: item.headers
+        };
+      }      
   }
 
   this.clearHistory = function() {
     this.project.history.length = 0;
+
+    this.selectRequest(undefined);
   }
 
   this.openSaveDialog = function() {
@@ -291,7 +299,7 @@ angular.module("RestedApp", ['ui.codemirror'])
       }
 
       this.project.saved.splice(idx, 1);
-      this.selectedRequest = undefined;
+      this.selectRequest(undefined);
   }
 
   this.init = function() {
