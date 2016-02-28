@@ -77,6 +77,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
 angular.module("RestedApp", ['ui.codemirror'])
 .controller("MainController", function($scope, $sce) {
+  this.project = {
+    "file": "",
+    "history": [],
+    "saved": []
+  };
   this.responseBodyFormat = "pretty";
   this.sidebarTab = "saved";
   this.requestEditorOptions = {
@@ -104,6 +109,7 @@ angular.module("RestedApp", ['ui.codemirror'])
     responseText: ""
   }
   this.ongoingRequest = undefined;
+  this.selectedRequest = undefined;
 
   var textTypesTable = [
     ["application/xml", "xml"],
@@ -155,6 +161,18 @@ angular.module("RestedApp", ['ui.codemirror'])
       delete this.request.headers["content-length"];
     }
 
+    //Push to history
+    var historyItem = {
+      url: this.request.url,
+      headers: this.request.headers,
+      contentType: this.request.contentType,
+      body: this.request.body,
+      method: this.request.method
+    };
+
+    this.project.history.push(historyItem);
+
+    //Now make the request
     var httpOptions = {
       protocol: u.protocol,
       hostname: u.hostname,
@@ -219,6 +237,17 @@ angular.module("RestedApp", ['ui.codemirror'])
     }
 
     this.ongoingRequest.abort();
+  }
+
+  this.selectRequest = function(item) {
+      this.selectedRequest = item;
+      this.request = {
+        url: item.url,
+        body: item.body,
+        contentType: item.contentType,
+        method: item.method,
+        headers: item.headers
+      };
   }
 
   this.init = function() {

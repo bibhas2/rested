@@ -112,11 +112,10 @@
                 </div>
               <div>
             </header>
-            <nav class="nav-group">
-              <h5 class="nav-group-title">Servers</h5>
-              <span class="nav-group-item" ng-repeat="server in main.serverList" ng-click="main.selectServer(server)" ng-dblclick="main.openEditServerDialog()" ng-class="{active: main.isServerSelected(server)}">
-                <span class="icon icon-record" ng-style="{color: server.started ? '#34c84a' : '#fc605b'}"></span>
-                {{server.name}}
+            <nav class="nav-group" ng-if="main.sidebarTab === 'history'">
+              <span class="nav-group-item" ng-repeat="h in main.project.history" ng-click="main.selectRequest(h)" ng-class="{active: main.selectedRequest === h}">
+                <!-- <span class="icon icon-record"></span> -->
+                {{h.method}} {{h.url}}
               </span>
             </nav>
           </div>
