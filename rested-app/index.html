@@ -130,11 +130,11 @@
                 <option>DELETE</option>
                 <option>HEAD</option>
               </select>
-              <input type="url" class="form-control url" placeholder="http://example.com">
-              <button class="btn btn-large btn-primary">Go</button>
+              <input type="url" ng-model="main.request.url" class="form-control url" placeholder="http://example.com">
+              <button class="btn btn-large btn-primary" ng-click="main.commitRequest()">Go</button>
               <div style="margin-left: 4px">
                 Body type:
-                <select id="bodyTypeSelect" ng-model="main.requestContentType" class="form-control body_type">
+                <select id="bodyTypeSelect" ng-model="main.request.contentType" class="form-control body_type">
                   <option>text/plain</option>
                   <option>application/json</option>
                   <option>application/xml</option>
@@ -143,7 +143,7 @@
                 </select>
                 <a href ng-click="main.showBodyTypeMenu()">{{main.requestContentType === "" ? "None" : main.requestContentType}}</a>
               </div>
-              <ui-codemirror ui-codemirror-opts="main.requestEditorOptions" ng-model="main.selectedRequest.responseText"></ui-codemirror>
+              <ui-codemirror ui-codemirror-opts="main.requestEditorOptions" ng-model="main.request.body"></ui-codemirror>
             </div>
 
             <div>

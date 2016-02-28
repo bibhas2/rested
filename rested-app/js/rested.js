@@ -6,7 +6,8 @@ const electron = remote.require('electron');
 const app = electron.app;
 const clipboard = electron.clipboard;
 var fs = require('fs')
-
+var url = require('url');
+var http = require('http');
 var Menu = remote.require('menu')
 var MenuItem = remote.require('menu-item')
 var jsonfile = require('jsonfile');
@@ -91,12 +92,69 @@ angular.module("RestedApp", ['ui.codemirror'])
     mode: ''
   };
   this.requestContentType = "";
-  
+  this.request = {
+    url: "",
+    body: "",
+    contentType: "",
+    method: "GET",
+    headers: {}
+  };
+  this.response = {
+    headers: {},
+    responseText: ""
+  }
+  this.ongoingRequest = undefined;
+
   this.showBodyTypeMenu = function() {
     var event = document.createEvent("MouseEvents");
     event.initMouseEvent("mousedown", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
     document.getElementById("bodyTypeSelect").dispatchEvent(event);
   }
+
+  this.commitRequest = function() {
+    var u = url.parse(this.request.url);
+    //console.log(u);
+    if (this.request.contentType.length > 0) {
+      this.request.headers["content-type"] = this.request.contentType;
+    } else {
+      delete this.request.headers["content-type"];
+    }
+
+    var httpOptions = {
+      protocol: u.protocol,
+      hostname: u.hostname,
+      port: u.port,
+      path: u.path,
+      method: this.request.method,
+      headers: this.request.headers
+    }
+    console.log(httpOptions);
+
+    var bodyAccumulator = [];
+
+    this.ongoingRequest = http.request(httpOptions, (res) => {
+      res.on('data', (chunk) => {
+        bodyAccumulator += chunk;
+      });
+      res.on('end', () => {
+        this.ongoingRequest = undefined;
+        console.log(res);
+      });
+    });
+
+    this.ongoingRequest.on('error', (e) => {
+      console.log(`problem with request: ${e.message}`);
+      this.ongoingRequest = undefined;
+    });
+
+    // write data to request body
+    if (this.request.body.length > 0) {
+      req.write(postData);
+    }
+
+    this.ongoingRequest.end();
+  }
+
   this.init = function() {
 
   }
