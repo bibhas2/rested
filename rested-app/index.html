@@ -51,6 +51,13 @@
       margin-top: 0px;
       margin-bottom: 0px;
     }
+    iframe.browser_view {
+      height: 42vh;
+      width: 100%;
+      -webkit-user-select: text;
+      margin-top: 0px;
+      margin-bottom: 0px;
+    }
     .CodeMirror {
       font-weight: bold;
       font-size: 14pt;
@@ -172,6 +179,9 @@
                     <button class="btn btn-default" ng-class="{active: main.responseBodyFormat == 'raw'}" title="Show raw body" ng-click="main.responseBodyFormat = 'raw'">
                       <span class="icon icon-tools"></span> &nbsp;Raw
                     </button>
+                    <button class="btn btn-default" ng-class="{active: main.responseBodyFormat == 'browser'}" title="Preview in browser" ng-click="main.responseBodyFormat = 'browser'" ng-if="main.responseIsHTML()">
+                      <span class="icon icon-qq"></span> &nbsp;Browser
+                    </button>
                   </div>
                   <div class="btn-group">
                     <button class="btn btn-default" ng-class="{active: main.showHeaders}" title="Show headers" ng-click="main.showHeaders = !main.showHeaders">
@@ -195,6 +205,7 @@
               <div>
                 <ui-codemirror ui-codemirror-opts="main.responseEditorOptions" ng-model="main.response.responseText" ng-if="main.responseBodyFormat == 'pretty'"></ui-codemirror>
                 <pre class="raw_view" ng-if="main.responseBodyFormat == 'raw'">{{main.response.responseText}}</pre>
+                <iframe class="browser_view" ng-if="main.responseBodyFormat == 'browser'" srcdoc="{{main.getResponseHTML()}}"></iframe>
               </div>
             </div>
           </div>

@@ -278,6 +278,20 @@ angular.module("RestedApp", ['ui.codemirror'])
       this.selectRequest(undefined);
   }
 
+  this.responseIsHTML = function() {
+    var contentType = this.response.headers["content-type"];
+
+    return contentType !== undefined && contentType.startsWith("text/html");
+  }
+
+  this.getResponseHTML = function() {
+    if (!this.responseIsHTML()) {
+      return undefined;
+    }
+
+    return $sce.trustAsHtml(this.response.responseText);
+  }
+
   function getUserHome() {
     return process.env.HOME || process.env.USERPROFILE;
   }
