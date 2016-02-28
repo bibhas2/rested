@@ -315,7 +315,8 @@ angular.module("RestedApp", ['ui.codemirror'])
         this.project.file = file;
         this.project.dirty = false;
         document.title = "Rested - " + (this.project.file || "Untitled");
-
+        this.selectRequest(undefined);
+        
         $scope.$apply();
       }
     });
