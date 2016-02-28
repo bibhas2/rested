@@ -1,8 +1,8 @@
 {
   "osx" : {
-    "title": "Boxy",
-    "background": "assets/boxy.png",
-    "icon": "assets/boxy.png",
+    "title": "Rested",
+    "background": "assets/rested.png",
+    "icon": "assets/rested.png",
     "icon-size": 80,
     "contents": [
       { "x": 438, "y": 344, "type": "link", "path": "/Applications" },
