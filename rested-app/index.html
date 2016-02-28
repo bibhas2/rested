@@ -183,6 +183,7 @@
 
                 <div class="toolbar-actions" align="center">
                   <span class="http_status" ng-class="{http_status_error: main.response.statusCode >= 400}" ng-if="main.response.statusCode !== undefined"><b>Status: </b>{{main.response.statusCode}} {{main.response.statusMessage}}</span>
+                  <span class="http_status http_status_error" ng-if="main.response.errorMessage !== undefined"><span class="icon icon-alert"></span> {{main.response.errorMessage}}</span>
                   <div class="btn-group">
                     <button class="btn btn-default" ng-class="{active: main.responseBodyFormat == 'pretty'}" title="Show formatted body" ng-click="main.responseBodyFormat = 'pretty'">
                       <span class="icon icon-list"></span> &nbsp;Pretty

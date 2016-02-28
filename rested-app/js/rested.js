@@ -76,7 +76,8 @@ angular.module("RestedApp", ['ui.codemirror'])
     headers: {},
     responseText: "",
     statusCode: undefined,
-    statusMessage: ""
+    statusMessage: "",
+    errorMessage: undefined
   }
   this.ongoingRequest = undefined;
   this.selectedRequest = undefined;
@@ -88,6 +89,15 @@ angular.module("RestedApp", ['ui.codemirror'])
     ["text/html", "xml"],
     ["text/json", "javascript"]
   ];
+
+  this.resetResponseState = function() {
+    this.response.responseText = "";
+    this.response.headers = {};
+    this.response.errorMessage = undefined;
+    this.response.statusCode = undefined;
+    this.response.statusMessage = "";
+    this.responseEditorOptions.mode = "";
+  }
 
   this.showBodyTypeMenu = function() {
     var event = document.createEvent("MouseEvents");
@@ -156,8 +166,7 @@ angular.module("RestedApp", ['ui.codemirror'])
       headers: this.request.headers
     }
 
-    this.response.responseText = "";
-    this.responseEditorOptions.mode = "";
+    this.resetResponseState();
 
     var httpClient = u.protocol === "https:" ? https : http;
 
@@ -205,6 +214,7 @@ angular.module("RestedApp", ['ui.codemirror'])
     this.ongoingRequest.on('error', (e) => {
       console.log(`problem with request: ${e.message}`);
       this.ongoingRequest = undefined;
+      this.response.errorMessage = e.message;
       $scope.$apply();
     });
 
@@ -227,10 +237,7 @@ angular.module("RestedApp", ['ui.codemirror'])
   this.selectRequest = function(item) {
       this.selectedRequest = item;
       //Clear response.
-      this.response.responseText = "";
-      this.response.headers = {};
-      this.response.statusCode = undefined;
-      this.response.statusMessage = "";
+      this.resetResponseState();
 
       if (item !== undefined) {
         this.request = {
