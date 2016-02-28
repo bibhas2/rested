@@ -121,13 +121,13 @@
               <div>
             </header>
             <nav class="nav-group" ng-if="main.sidebarTab === 'saved'">
-              <span class="nav-group-item" ng-repeat="s in main.project.saved" ng-click="main.selectRequest(s)" ng-class="{active: main.selectedRequest === s}">
+              <span class="nav-group-item" ng-repeat="s in main.project.saved track by $index" ng-click="main.selectRequest(s)" ng-class="{active: main.selectedRequest === s}">
                 <!-- <span class="icon icon-record"></span> -->
                 {{s.name}}
               </span>
             </nav>
             <nav class="nav-group" ng-if="main.sidebarTab === 'history'">
-              <span class="nav-group-item" ng-repeat="h in main.project.history" ng-click="main.selectRequest(h)" ng-class="{active: main.selectedRequest === h}">
+              <span class="nav-group-item" ng-repeat="h in main.project.history track by $index" ng-click="main.selectRequest(h)" ng-class="{active: main.selectedRequest === h}">
                 <!-- <span class="icon icon-record"></span> -->
                 {{h.method}} {{h.url}}
               </span>

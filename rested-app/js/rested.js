@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function () {
 angular.module("RestedApp", ['ui.codemirror'])
 .controller("MainController", function($scope, $sce) {
   this.project = {
-    "file": "",
+    "file": getDefaultProjectFile(),
     "history": [],
     "saved": []
   };
@@ -173,6 +173,9 @@ angular.module("RestedApp", ['ui.codemirror'])
 
     this.project.history.push(historyItem);
 
+    //Save the project
+    this.saveProjectFile();
+
     //Now make the request
     var httpOptions = {
       protocol: u.protocol,
@@ -254,7 +257,7 @@ angular.module("RestedApp", ['ui.codemirror'])
           method: item.method,
           headers: item.headers
         };
-      }      
+      }
   }
 
   this.clearHistory = function() {
@@ -302,8 +305,41 @@ angular.module("RestedApp", ['ui.codemirror'])
       this.selectRequest(undefined);
   }
 
-  this.init = function() {
+  function getUserHome() {
+    return process.env.HOME || process.env.USERPROFILE;
+  }
 
+  function getDefaultProjectFile() {
+    return getUserHome() + "/" + ".rested_project";
+  }
+
+  this.saveProjectFile = function() {
+    jsonfile.writeFile(this.project.file, this.project, function (err) {
+      if (err !== null) {
+        alert(`Filed to save settings: ${file}`);
+        console.error(err);
+      }
+    });
+  }
+
+  this.loadProjectFile = function(file) {
+    jsonfile.readFile(file, (err, obj) => {
+      if (err !== null || obj === undefined) {
+        if (err.code !== 'ENOENT') {
+          alert(`Filed to load project: ${file}`);
+        }
+        console.error(err);
+      } else {
+        this.project = obj;
+        this.project.file = file;
+
+        $scope.$apply();
+      }
+    });
+  }
+
+  this.init = function() {
+    this.loadProjectFile(getDefaultProjectFile());
   }
 
   this.init(); //Initialize the controller.
