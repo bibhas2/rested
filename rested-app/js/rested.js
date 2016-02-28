@@ -14,40 +14,6 @@ var jsonfile = require('jsonfile');
 //window.$ = window.jQuery = require('jquery');
 
 //require("../bower_components/jquery.splitter/js/jquery.splitter-0.20.0.js");
-var template = [
-  {
-      label: app.getName(),
-      submenu: [
-        {
-          label: 'About ' + name,
-          role: 'about'
-        },
-        {
-          type: 'separator'
-        },
-        {
-          label: 'Quit',
-          accelerator: 'Command+Q',
-          click: function() { app.quit(); }
-        },
-      ]
-    },
-    {
-      label: "Edit",
-      submenu: [
-          { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
-          { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
-          { type: "separator" },
-          { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
-          { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
-          { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
-          { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
-      ]
-    }
-];
-
-var menu = Menu.buildFromTemplate(template);
-Menu.setApplicationMenu(menu);
 
 // Build our new menu
 var menu = new Menu()
@@ -78,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
 angular.module("RestedApp", ['ui.codemirror'])
 .controller("MainController", function($scope, $sce) {
   this.project = {
-    "file": getDefaultProjectFile(),
+    "file": undefined,
     "history": [],
     "saved": []
   };
@@ -313,17 +279,23 @@ angular.module("RestedApp", ['ui.codemirror'])
     return getUserHome() + "/" + ".rested_project";
   }
 
-  this.saveProjectFile = function() {
-    jsonfile.writeFile(this.project.file, this.project, function (err) {
+  this.saveProjectFile = function(file) {
+    var filePath = file || this.project.file || getDefaultProjectFile();
+
+    jsonfile.writeFile(filePath, this.project, (err) => {
       if (err !== null) {
         alert(`Filed to save settings: ${file}`);
         console.error(err);
+      } else {
+        this.project.file = file;
       }
     });
   }
 
   this.loadProjectFile = function(file) {
-    jsonfile.readFile(file, (err, obj) => {
+    var filePath = file || getDefaultProjectFile();
+
+    jsonfile.readFile(filePath, (err, obj) => {
       if (err !== null || obj === undefined) {
         if (err.code !== 'ENOENT') {
           alert(`Filed to load project: ${file}`);
@@ -338,8 +310,86 @@ angular.module("RestedApp", ['ui.codemirror'])
     });
   }
 
+  this.showProjectSaveDialog = function() {
+    electron.dialog.showSaveDialog({title: "Save project"}, (path) => {
+      if (path === undefined) {
+        return;
+      }
+
+      this.saveProjectFile(path);
+    });
+  }
+
+  this.showProjectOpenDialog = function() {
+    electron.dialog.showOpenDialog({title: "Open project"}, (paths) => {
+      if (paths === undefined || paths.length === 0) {
+        return;
+      }
+
+      this.loadProjectFile(paths[0]);
+    });
+  }
+
   this.init = function() {
-    this.loadProjectFile(getDefaultProjectFile());
+    var template = [
+      {
+          label: app.getName(),
+          submenu: [
+            {
+              label: 'About ' + name,
+              role: 'about'
+            },
+            {
+              type: 'separator'
+            },
+            {
+              label: 'Quit',
+              accelerator: 'Command+Q',
+              click: () => { app.quit(); }
+            },
+          ]
+        },
+        {
+            label: "File",
+            submenu: [
+              {
+                label: 'Open Project...',
+                accelerator: 'CmdOrCtrl+O',
+                click: () => {
+                  this.showProjectOpenDialog();
+                }
+              },
+              {
+                label: 'Save Project',
+                accelerator: 'CmdOrCtrl+S',
+                click: () => {
+                  if (this.project.file === undefined) {
+                    this.showProjectSaveDialog();
+                  } else {
+                    this.saveProjectFile();
+                  }
+                }
+              },
+            ]
+          },
+        {
+          label: "Edit",
+          submenu: [
+              { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" },
+              { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" },
+              { type: "separator" },
+              { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" },
+              { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" },
+              { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" },
+              { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+          ]
+        }
+    ];
+
+    var menu = Menu.buildFromTemplate(template);
+    Menu.setApplicationMenu(menu);
+
+    this.loadProjectFile();
   }
 
   this.init(); //Initialize the controller.
