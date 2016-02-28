@@ -118,6 +118,22 @@ angular.module("RestedApp", ['ui.codemirror'])
     document.getElementById("bodyTypeSelect").dispatchEvent(event);
   }
 
+  this.contentTypeChanged = function() {
+    textTypesTable.some(typeItem => {
+      if (this.request.contentType === undefined) {
+        return true; //Break out.
+      }
+
+      if (this.request.contentType.startsWith(typeItem[0])) {
+        this.requestEditorOptions.mode = typeItem[1];
+
+        return true;
+      }
+
+      return false;
+    });
+  }
+
   this.commitRequest = function() {
     var u = url.parse(this.request.url);
 
@@ -191,7 +207,7 @@ angular.module("RestedApp", ['ui.codemirror'])
 
     // write data to request body
     if (this.request.body.length > 0) {
-      req.write(postData);
+      this.ongoingRequest.write(this.request.body);
     }
 
     this.ongoingRequest.end();

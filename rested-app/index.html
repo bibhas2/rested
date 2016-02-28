@@ -123,7 +123,7 @@
 
           <div class="pane">
             <div>
-              <select class="form-control method">
+              <select class="form-control method" ng-model="main.request.method">
                 <option>GET</option>
                 <option>POST</option>
                 <option>PUT</option>
@@ -134,14 +134,14 @@
               <button class="btn btn-large btn-primary" ng-click="main.commitRequest()">Go</button>
               <div style="margin-left: 4px">
                 Body type:
-                <select id="bodyTypeSelect" ng-model="main.request.contentType" class="form-control body_type">
+                <select id="bodyTypeSelect" ng-model="main.request.contentType" ng-change="main.contentTypeChanged()" class="form-control body_type">
                   <option>text/plain</option>
                   <option>application/json</option>
                   <option>application/xml</option>
                   <option>text/xml</option>
                   <option value="">None</option>
                 </select>
-                <a href ng-click="main.showBodyTypeMenu()">{{main.requestContentType === "" ? "None" : main.requestContentType}}</a>
+                <a href ng-click="main.showBodyTypeMenu()">{{main.request.contentType === "" ? "None" : main.request.contentType}}</a>
               </div>
               <ui-codemirror ui-codemirror-opts="main.requestEditorOptions" ng-model="main.request.body"></ui-codemirror>
             </div>
