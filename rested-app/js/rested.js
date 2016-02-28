@@ -110,6 +110,7 @@ angular.module("RestedApp", ['ui.codemirror'])
   }
   this.ongoingRequest = undefined;
   this.selectedRequest = undefined;
+  this.saveRequestName = "";
 
   var textTypesTable = [
     ["application/xml", "xml"],
@@ -252,6 +253,45 @@ angular.module("RestedApp", ['ui.codemirror'])
 
   this.clearHistory = function() {
     this.project.history.length = 0;
+  }
+
+  this.openSaveDialog = function() {
+    document.getElementById("saveRequestDialog").showModal();
+  }
+
+  this.saveRequest = function() {
+    //Push to history
+    var savedItem = {
+      name: this.saveRequestName,
+      url: this.request.url,
+      headers: this.request.headers,
+      contentType: this.request.contentType,
+      body: this.request.body,
+      method: this.request.method
+    };
+
+    this.project.saved.push(savedItem);
+
+    this.closeSaveDialog();
+  }
+
+  this.closeSaveDialog = function() {
+    document.getElementById("saveRequestDialog").close();
+  }
+
+  this.removeSelectedSavedRequest = function() {
+      if (this.selectedRequest.name === undefined) {
+        return; //Must be a history item.
+      }
+
+      var idx = this.project.saved.indexOf(this.selectedRequest);
+
+      if (idx < 0) {
+        return;
+      }
+
+      this.project.saved.splice(idx, 1);
+      this.selectedRequest = undefined;
   }
 
   this.init = function() {
