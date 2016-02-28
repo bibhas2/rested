@@ -44,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function () {
 angular.module("RestedApp", ['ui.codemirror'])
 .controller("MainController", function($scope, $sce) {
   this.project = {
+    "dirty": false,
     "file": undefined,
     "history": [],
     "saved": []
@@ -139,8 +140,8 @@ angular.module("RestedApp", ['ui.codemirror'])
 
     this.project.history.push(historyItem);
 
-    //Save the project
-    this.saveProjectFile();
+    //Mark as dirty
+    this.project.dirty = true;
 
     //Now make the request
     var httpOptions = {
@@ -228,6 +229,7 @@ angular.module("RestedApp", ['ui.codemirror'])
 
   this.clearHistory = function() {
     this.project.history.length = 0;
+    this.project.dirty = true;
 
     this.selectRequest(undefined);
   }
@@ -248,6 +250,7 @@ angular.module("RestedApp", ['ui.codemirror'])
     };
 
     this.project.saved.push(savedItem);
+    this.project.dirty = true;
 
     this.closeSaveDialog();
   }
@@ -268,6 +271,7 @@ angular.module("RestedApp", ['ui.codemirror'])
       }
 
       this.project.saved.splice(idx, 1);
+      this.project.dirty = true;
       this.selectRequest(undefined);
   }
 
@@ -279,7 +283,7 @@ angular.module("RestedApp", ['ui.codemirror'])
     return getUserHome() + "/" + ".rested_project";
   }
 
-  this.saveProjectFile = function(file) {
+  this.saveProjectFile = function(file, onSuccess) {
     var filePath = file || this.project.file || getDefaultProjectFile();
 
     jsonfile.writeFile(filePath, this.project, (err) => {
@@ -288,6 +292,11 @@ angular.module("RestedApp", ['ui.codemirror'])
         console.error(err);
       } else {
         this.project.file = file;
+        this.project.dirty = false;
+
+        if (onSuccess !== undefined) {
+          onSuccess();
+        }
       }
     });
   }
@@ -304,7 +313,7 @@ angular.module("RestedApp", ['ui.codemirror'])
       } else {
         this.project = obj;
         this.project.file = file;
-
+        this.project.dirty = false;
         $scope.$apply();
       }
     });
@@ -330,6 +339,27 @@ angular.module("RestedApp", ['ui.codemirror'])
     });
   }
 
+  this.quitApplication = function() {
+    if (this.project.dirty) {
+      if (this.project.file === undefined) {
+        //Save quietly
+        this.saveProjectFile(undefined, () => {
+          app.quit();
+        });
+      } else {
+        if (confirm("Project has changed. Would you like to save?"))  {
+          this.saveProjectFile(undefined, () => {
+            app.quit();
+          });
+        } else {
+          app.quit();
+        }
+      }
+    } else {
+      app.quit();
+    }
+  }
+
   this.init = function() {
     var template = [
       {
@@ -345,7 +375,9 @@ angular.module("RestedApp", ['ui.codemirror'])
             {
               label: 'Quit',
               accelerator: 'Command+Q',
-              click: () => { app.quit(); }
+              click: () => {
+                this.quitApplication();
+              }
             },
           ]
         },
