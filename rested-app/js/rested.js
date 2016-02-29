@@ -154,7 +154,8 @@ angular.module("RestedApp", ['ui.codemirror'])
     };
 
     this.project.history.push(historyItem);
-
+    this.filterHistory();
+    
     //Mark as dirty
     this.project.dirty = true;
 
@@ -254,6 +255,8 @@ angular.module("RestedApp", ['ui.codemirror'])
 
   this.clearHistory = function() {
     this.project.history.length = 0;
+    this.filteredHistory = undefined;
+    this.searchText = "";
     this.project.dirty = true;
 
     this.selectRequest(undefined);
