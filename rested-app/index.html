@@ -68,7 +68,7 @@
       height: 42vh;
     }
     .sidebar_list {
-      height: 90vh;
+      height: 85vh;
       overflow-y: auto;
     }
     select.method {
@@ -147,11 +147,14 @@
                 {{s.name}}
               </span>
             </nav>
-            <nav class="nav-group sidebar_list" ng-if="main.sidebarTab === 'history'">
-              <span class="nav-group-item" ng-repeat="h in main.project.history track by $index" ng-click="main.selectRequest(h)" ng-class="{active: main.selectedRequest === h}">
-                <!-- <span class="icon icon-record"></span> -->
-                {{h.method}} {{h.url}}
-              </span>
+            <nav class="nav-group" ng-if="main.sidebarTab === 'history'">
+              <input type="search" ng-model="main.searchText" ng-change="main.filterHistory()" class="form-control" placeholder="Search"/>
+              <div class="sidebar_list">
+                <span class="nav-group-item" ng-repeat="h in main.getFilteredHistory() track by $index" ng-click="main.selectRequest(h)" ng-class="{active: main.selectedRequest === h}">
+                  <!-- <span class="icon icon-record"></span> -->
+                  {{h.method}} {{h.url}}
+                </span>
+              </div>
             </nav>
           </div>
 

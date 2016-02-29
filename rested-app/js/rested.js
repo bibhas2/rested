@@ -50,6 +50,8 @@ angular.module("RestedApp", ['ui.codemirror'])
     "history": [],
     "saved": []
   };
+  this.filteredHistory = undefined;
+  this.searchText = "";
   this.responseBodyFormat = "pretty";
   this.sidebarTab = "history";
   this.requestEditorOptions = {
@@ -351,6 +353,8 @@ angular.module("RestedApp", ['ui.codemirror'])
         this.project = obj;
         this.project.file = file;
         this.project.dirty = false;
+        this.filteredHistory = undefined;
+        this.searchText = "";
         document.title = "Rested - " + (this.project.file || "Untitled");
         this.selectRequest(undefined);
 
@@ -406,6 +410,29 @@ angular.module("RestedApp", ['ui.codemirror'])
     this.closeProject(() => {
       app.quit();
     })
+  }
+
+  this.filterHistory = function() {
+    this.searchText = this.searchText.trim();
+
+    if (this.searchText.length === 0) {
+      //Empty search text
+      this.filteredHistory = undefined;
+
+      return;
+    }
+
+    var reg = new RegExp(this.searchText, "i");
+
+    this.filteredHistory = this.project.history.filter((h) => {
+        return h.url.search(reg) >= 0;
+      }
+    );
+  }
+
+  this.getFilteredHistory = function() {
+    return this.filteredHistory === undefined ?
+      this.project.history : this.filteredHistory;
   }
 
   this.init = function() {
