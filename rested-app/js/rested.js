@@ -51,6 +51,7 @@ angular.module("RestedApp", ['ui.codemirror'])
     "saved": []
   };
   this.filteredHistory = undefined;
+  this.requestHeaderList = undefined;
   this.searchText = "";
   this.responseBodyFormat = "pretty";
   this.sidebarTab = "history";
@@ -444,7 +445,7 @@ angular.module("RestedApp", ['ui.codemirror'])
     this.requestHeaderList = Object.keys(this.request.headers).map((name) => {
       return {
         name: name,
-        value: this.request.headers[name]
+        value: this.selectedRequest.headers[name]
       };
     });
 
@@ -464,6 +465,24 @@ angular.module("RestedApp", ['ui.codemirror'])
       name: "",
       value: ""
     })
+  }
+
+  this.saveRequestHeaders = function() {
+    this.request.headers = {}; //Clear out
+
+    this.requestHeaderList.forEach((h) => {
+      var name = h.name.trim();
+
+      if (name.length > 0) {
+        this.request.headers[h.name] = h.value;
+      }
+    });
+
+    this.closeRequestHeaderEditorDialog();
+  }
+
+  this.closeRequestHeaderEditorDialog = function() {
+    document.getElementById("requestHeaderEditorDialog").close();
   }
 
   this.init = function() {

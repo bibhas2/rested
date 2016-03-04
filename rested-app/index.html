@@ -100,6 +100,10 @@
       width:165px;
       margin-right: 4px;
     }
+    #requestHeaderEditorDialog form > div {
+      height: 300px;
+      overflow-y: auto;
+    }
     </style>
   </head>
   <body ng-app="RestedApp" ng-controller="MainController as main">
@@ -183,12 +187,8 @@
                   <option>text/xml</option>
                   <option value="">None</option>
                 </select>
-                <a href ng-click="main.showBodyTypeMenu()">{{main.request.contentType === "" ? "None" : main.request.contentType}}</a>
-                <div class="btn-group">
-                  <button class="btn btn-default" title="Edit request headers" ng-click="main.openRequestHeaderEditorDialog()">
-                    <span class="icon icon-list"></span> &nbsp;Headers
-                  </button>
-                </div>
+                <a href ng-click="main.showBodyTypeMenu()">{{main.request.contentType === "" ? "None" : main.request.contentType}}</a>&nbsp;
+                <a href title="Edit request headers" ng-click="main.openRequestHeaderEditorDialog()">Edit headers</a>
               </div>
               <ui-codemirror ui-codemirror-opts="main.requestEditorOptions" ng-model="main.request.body"></ui-codemirror>
             </div>
@@ -267,10 +267,10 @@
         </header>
 
         <form style="padding: 10px">
-          <div class="form-group" style="height: 100px; overflow-y: auto">
+          <div class="form-group">
             <div style="margin-bottom: 2px" ng-repeat="h in main.requestHeaderList">
-              <input type="text" class="form-control header_field" ng-model="h.name" placeholder="">
-              <input type="text" class="form-control header_field" ng-model="h.value" placeholder="">
+              <input type="text" class="form-control header_field" ng-model="h.name" placeholder="Header name">
+              <input type="text" class="form-control header_field" ng-model="h.value" placeholder="Header value">
               <button class="btn btn-default" title="Delete this header" ng-click="main.deleteRequestHeader($index)">
                 <span class="icon icon-minus"></span>
               </button>
@@ -283,8 +283,8 @@
 
         <footer class="toolbar toolbar-footer">
             <div class="toolbar-actions">
-                <button class="btn btn-primary pull-right" ng-click="main.saveRequest()" style="width:50pt">Save</button>
-                <button class="btn btn-default pull-right" ng-click="main.closeSaveDialog()" style="width:50pt">Cancel</button>
+                <button class="btn btn-primary pull-right" ng-click="main.saveRequestHeaders()" style="width:50pt">Save</button>
+                <button class="btn btn-default pull-right" ng-click="main.closeRequestHeaderEditorDialog()" style="width:50pt">Cancel</button>
             </div>
         </footer>
     </dialog>
