@@ -52,6 +52,7 @@ angular.module("RestedApp", ['ui.codemirror'])
   };
   this.filteredHistory = undefined;
   this.requestHeaderList = undefined;
+  this.formInputList = [];
   this.searchText = "";
   this.responseBodyFormat = "pretty";
   this.sidebarTab = "history";
@@ -483,6 +484,51 @@ angular.module("RestedApp", ['ui.codemirror'])
 
   this.closeRequestHeaderEditorDialog = function() {
     document.getElementById("requestHeaderEditorDialog").close();
+  }
+
+  this.openFormInputDialog = function() {
+    if (this.formInputList.length == 0) {
+      this.addInputField();
+    }
+
+    document.getElementById("formInputDialog").showModal();
+  }
+
+  this.deleteInputField = function(index) {
+    this.formInputList.splice(index, 1);
+  }
+
+  this.addInputField = function() {
+    this.formInputList.push({
+      name: "",
+      value: ""
+    })
+  }
+
+  this.saveFormInput = function() {
+    this.request.body = ""; //Clear out
+
+    var regex = /%20/g
+
+    this.formInputList.forEach((h) => {
+      var name = h.name.trim();
+
+      if (name.length > 0) {
+        if (this.request.body.length > 0) {
+          this.request.body += "&";
+        }
+
+        this.request.body += encodeURIComponent(h.name).replace(regex, "+")
+          + "="
+          + encodeURIComponent(h.value).replace(regex, "+");
+      }
+    });
+
+    this.closeFormInputDialog();
+  }
+
+  this.closeFormInputDialog = function() {
+    document.getElementById("formInputDialog").close();
   }
 
   this.init = function() {
