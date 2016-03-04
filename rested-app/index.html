@@ -96,6 +96,10 @@
     .http_status_error {
       color: red;
     }
+    input.header_field {
+      width:165px;
+      margin-right: 4px;
+    }
     </style>
   </head>
   <body ng-app="RestedApp" ng-controller="MainController as main">
@@ -180,6 +184,11 @@
                   <option value="">None</option>
                 </select>
                 <a href ng-click="main.showBodyTypeMenu()">{{main.request.contentType === "" ? "None" : main.request.contentType}}</a>
+                <div class="btn-group">
+                  <button class="btn btn-default" title="Edit request headers" ng-click="main.openRequestHeaderEditorDialog()">
+                    <span class="icon icon-list"></span> &nbsp;Headers
+                  </button>
+                </div>
               </div>
               <ui-codemirror ui-codemirror-opts="main.requestEditorOptions" ng-model="main.request.body"></ui-codemirror>
             </div>
@@ -252,5 +261,32 @@
         </footer>
     </dialog>
 
+    <dialog id="requestHeaderEditorDialog">
+        <header class="toolbar toolbar-header">
+            <h1 class="title">Edit request headers</h1>
+        </header>
+
+        <form style="padding: 10px">
+          <div class="form-group" style="height: 100px; overflow-y: auto">
+            <div style="margin-bottom: 2px" ng-repeat="h in main.requestHeaderList">
+              <input type="text" class="form-control header_field" ng-model="h.name" placeholder="">
+              <input type="text" class="form-control header_field" ng-model="h.value" placeholder="">
+              <button class="btn btn-default" title="Delete this header" ng-click="main.deleteRequestHeader($index)">
+                <span class="icon icon-minus"></span>
+              </button>
+            </div>
+            <button class="btn btn-default pull-right" title="Add a header" ng-click="main.addRequestHeader()">
+              <span class="icon icon-plus"></span> Add
+            </button>
+          </div>
+        </form>
+
+        <footer class="toolbar toolbar-footer">
+            <div class="toolbar-actions">
+                <button class="btn btn-primary pull-right" ng-click="main.saveRequest()" style="width:50pt">Save</button>
+                <button class="btn btn-default pull-right" ng-click="main.closeSaveDialog()" style="width:50pt">Cancel</button>
+            </div>
+        </footer>
+    </dialog>
   </body>
 </html>

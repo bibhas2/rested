@@ -87,6 +87,7 @@ angular.module("RestedApp", ['ui.codemirror'])
 
   var textTypesTable = [
     ["application/xml", "xml"],
+    ["text/xml", "xml"],
     ["application/json", "javascript"],
     ["text/html", "xml"],
     ["text/json", "javascript"]
@@ -155,7 +156,7 @@ angular.module("RestedApp", ['ui.codemirror'])
 
     this.project.history.push(historyItem);
     this.filterHistory();
-    
+
     //Mark as dirty
     this.project.dirty = true;
 
@@ -436,6 +437,33 @@ angular.module("RestedApp", ['ui.codemirror'])
   this.getFilteredHistory = function() {
     return this.filteredHistory === undefined ?
       this.project.history : this.filteredHistory;
+  }
+
+  this.openRequestHeaderEditorDialog = function() {
+    //Refresh the list
+    this.requestHeaderList = Object.keys(this.request.headers).map((name) => {
+      return {
+        name: name,
+        value: this.request.headers[name]
+      };
+    });
+
+    if (this.requestHeaderList.length == 0) {
+      this.addRequestHeader();
+    }
+
+    document.getElementById("requestHeaderEditorDialog").showModal();
+  }
+
+  this.deleteRequestHeader = function(index) {
+    this.requestHeaderList.splice(index, 1);
+  }
+
+  this.addRequestHeader = function() {
+    this.requestHeaderList.push({
+      name: "",
+      value: ""
+    })
   }
 
   this.init = function() {
