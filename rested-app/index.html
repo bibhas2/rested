@@ -28,6 +28,9 @@
           background: rgba(0,0,0,0.2);
       }
     }
+    dialog.header_editor {
+      width:500px;
+    }
     tr.selected {
       color: #fff;
       background-color: #116cd6;
@@ -97,8 +100,8 @@
       color: red;
     }
     input.header_field {
-      width:165px;
-      margin-right: 4px;
+      width:210px;
+      margin: 4px;
     }
     #requestHeaderEditorDialog form > div {
       height: 300px;
@@ -261,21 +264,21 @@
         </footer>
     </dialog>
 
-    <dialog id="requestHeaderEditorDialog">
+    <dialog id="requestHeaderEditorDialog" class="header_editor">
         <header class="toolbar toolbar-header">
             <h1 class="title">Edit request headers</h1>
         </header>
 
         <form style="padding: 10px">
           <div class="form-group">
-            <div style="margin-bottom: 2px" ng-repeat="h in main.requestHeaderList">
+            <div ng-repeat="h in main.requestHeaderList">
               <input type="text" class="form-control header_field" ng-model="h.name" placeholder="Header name">
               <input type="text" class="form-control header_field" ng-model="h.value" placeholder="Header value">
               <button class="btn btn-default" title="Delete this header" ng-click="main.deleteRequestHeader($index)">
                 <span class="icon icon-minus"></span>
               </button>
             </div>
-            <button class="btn btn-default pull-right" title="Add a header" ng-click="main.addRequestHeader()">
+            <button class="btn btn-default" style="margin: 4px" title="Add a header" ng-click="main.addRequestHeader()">
               <span class="icon icon-plus"></span> Add
             </button>
           </div>

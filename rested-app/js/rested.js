@@ -445,7 +445,7 @@ angular.module("RestedApp", ['ui.codemirror'])
     this.requestHeaderList = Object.keys(this.request.headers).map((name) => {
       return {
         name: name,
-        value: this.selectedRequest.headers[name]
+        value: this.request.headers[name]
       };
     });
 
