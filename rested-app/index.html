@@ -236,7 +236,7 @@
 
               <!-- Response data -->
               <div>
-                <ui-codemirror ui-codemirror-opts="main.responseEditorOptions" ng-model="main.response.responseText" ng-if="main.responseBodyFormat == 'pretty'"></ui-codemirror>
+                <ui-codemirror ui-codemirror-opts="main.responseEditorOptions" ng-model="main.response.responseTextFormatted" ng-if="main.responseBodyFormat == 'pretty'"></ui-codemirror>
                 <pre class="raw_view" ng-if="main.responseBodyFormat == 'raw'">{{main.response.responseText}}</pre>
                 <iframe class="browser_view" ng-if="main.responseBodyFormat == 'browser'" srcdoc="{{main.getResponseHTML()}}"></iframe>
               </div>
