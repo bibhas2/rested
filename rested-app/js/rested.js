@@ -13,6 +13,7 @@ var Menu = remote.require('menu')
 var MenuItem = remote.require('menu-item')
 var jsonfile = require('jsonfile');
 var beautify = require('js-beautify').js_beautify
+var beautify_html = require('js-beautify').html
 
 // Build our new menu
 var menu = new Menu()
@@ -214,8 +215,9 @@ angular.module("RestedApp", ['ui.codemirror'])
         if (this.responseEditorOptions.mode === "javascript") {
           this.response.responseTextFormatted =
             beautify(this.response.responseText, { indent_size: 2 });
-
-          console.log(this.response.responseTextFormatted)
+        } else if (this.responseEditorOptions.mode === "xml") {
+          this.response.responseTextFormatted =
+            beautify_html(this.response.responseText, { indent_size: 2 });
         }
         //console.log(res);
         $scope.$apply();
