@@ -51,6 +51,7 @@ angular.module("RestedApp", ['ui.codemirror'])
   };
   this.filteredHistory = undefined;
   this.requestHeaderList = undefined;
+  this.cookieList = undefined;
   this.formInputList = [];
   this.searchText = "";
   this.responseBodyFormat = "pretty";
@@ -73,7 +74,8 @@ angular.module("RestedApp", ['ui.codemirror'])
     body: "",
     contentType: "",
     method: "GET",
-    headers: {}
+    headers: {},
+    cookies: {}
   };
   this.response = {
     headers: {},
@@ -136,22 +138,42 @@ angular.module("RestedApp", ['ui.codemirror'])
       u = url.parse(this.request.url);
     }
 
-    //console.log(u);
+    //Content type header
     if (this.request.contentType.length > 0) {
       this.request.headers["content-type"] = this.request.contentType;
     } else {
       delete this.request.headers["content-type"];
     }
+    //Content length header
     if (this.request.body.length > 0) {
       this.request.headers["content-length"] = this.request.body.length;
     } else {
       delete this.request.headers["content-length"];
+    }
+    //Cookie header
+    var cookies = this.request.cookies || {};
+    var cookieHeaderValue = "";
+    var keys = Object.keys(cookies);
+
+    keys.forEach((name, index) => {
+      cookieHeaderValue += name + "=" + cookies[name];
+
+      if (index < keys.length - 1) {
+        cookieHeaderValue += "; ";
+      }
+    });
+
+    if (cookieHeaderValue.length > 0) {
+      this.request.headers["cookie"] = cookieHeaderValue;
+    } else {
+      delete this.request.headers["cookie"];
     }
 
     //Push to history
     var historyItem = {
       url: this.request.url,
       headers: this.request.headers,
+      cookies: this.request.cookies,
       contentType: this.request.contentType,
       body: this.request.body,
       method: this.request.method
@@ -493,6 +515,55 @@ angular.module("RestedApp", ['ui.codemirror'])
   this.closeRequestHeaderEditorDialog = function() {
     document.getElementById("requestHeaderEditorDialog").close();
   }
+
+
+  this.openCookieEditorDialog = function() {
+    //Refresh the list
+    var cookies = this.request.cookies || {};
+
+    this.cookieList = Object.keys(cookies).map((name) => {
+      return {
+        name: name,
+        value: cookies[name]
+      };
+    });
+
+    if (this.cookieList.length == 0) {
+      this.addCookie();
+    }
+
+    document.getElementById("cookieEditorDialog").showModal();
+  }
+
+  this.deleteCookie = function(index) {
+    this.cookieList.splice(index, 1);
+  }
+
+  this.addCookie = function() {
+    this.cookieList.push({
+      name: "",
+      value: ""
+    })
+  }
+
+  this.saveCookies = function() {
+    this.request.cookies = {}; //Clear out
+
+    this.cookieList.forEach((h) => {
+      var name = h.name.trim();
+
+      if (name.length > 0) {
+        this.request.cookies[h.name] = h.value;
+      }
+    });
+
+    this.closeCookieEditorDialog();
+  }
+
+  this.closeCookieEditorDialog = function() {
+    document.getElementById("cookieEditorDialog").close();
+  }
+
 
   this.openFormInputDialog = function() {
     if (this.formInputList.length == 0) {

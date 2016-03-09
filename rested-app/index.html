@@ -192,8 +192,9 @@
                   <option value="">None</option>
                 </select>
                 <a href ng-click="main.showBodyTypeMenu()">{{main.request.contentType === "" ? "None" : main.request.contentType}}</a>&nbsp;
-                <a href title="Edit request headers" ng-click="main.openRequestHeaderEditorDialog()">Edit headers</a>&nbsp;
-                <a href title="Edit form input" ng-if="main.request.contentType === 'application/x-www-form-urlencoded'" ng-click="main.openFormInputDialog()">Form input</a>&nbsp;
+                <a href title="Edit request headers" ng-click="main.openRequestHeaderEditorDialog()">Headers</a>&nbsp;
+                <a href title="Edit cookies" ng-click="main.openCookieEditorDialog()">Cookies</a>&nbsp;
+                <a href title="Edit form input" ng-if="main.request.contentType === 'application/x-www-form-urlencoded'" ng-click="main.openFormInputDialog()">Form</a>&nbsp;
               </div>
               <ui-codemirror ui-codemirror-opts="main.requestEditorOptions" ng-model="main.request.body"></ui-codemirror>
             </div>
@@ -262,6 +263,34 @@
             <div class="toolbar-actions">
                 <button class="btn btn-primary pull-right" ng-click="main.saveRequest()" style="width:50pt">Save</button>
                 <button class="btn btn-default pull-right" ng-click="main.closeSaveDialog()" style="width:50pt">Cancel</button>
+            </div>
+        </footer>
+    </dialog>
+
+    <dialog id="cookieEditorDialog" class="header_editor">
+        <header class="toolbar toolbar-header">
+            <h1 class="title">Edit cookies</h1>
+        </header>
+
+        <form style="padding: 10px">
+          <div class="form-group">
+            <div ng-repeat="h in main.cookieList">
+              <input type="text" class="form-control header_field" ng-model="h.name" placeholder="Cookie name">
+              <input type="text" class="form-control header_field" ng-model="h.value" placeholder="Cookie value">
+              <button class="btn btn-default" title="Delete this cookie" ng-click="main.deleteCookie($index)">
+                <span class="icon icon-minus"></span>
+              </button>
+            </div>
+            <button class="btn btn-default" style="margin: 4px" title="Add a header" ng-click="main.addCookie()">
+              <span class="icon icon-plus"></span> Add
+            </button>
+          </div>
+        </form>
+
+        <footer class="toolbar toolbar-footer">
+            <div class="toolbar-actions">
+                <button class="btn btn-primary pull-right" ng-click="main.saveCookies()" style="width:50pt">Save</button>
+                <button class="btn btn-default pull-right" ng-click="main.closeCookieEditorDialog()" style="width:50pt">Cancel</button>
             </div>
         </footer>
     </dialog>
