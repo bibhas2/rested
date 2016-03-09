@@ -97,6 +97,7 @@ angular.module("RestedApp", ['ui.codemirror'])
 
   this.resetResponseState = function() {
     this.response.responseText = "";
+    this.response.responseTextFormatted = "";
     this.response.headers = {};
     this.response.errorMessage = undefined;
     this.response.statusCode = undefined;
