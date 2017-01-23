@@ -131,12 +131,12 @@ angular.module("RestedApp", ['ui.codemirror'])
   }
 
   this.commitRequest = function() {
-    var u = url.parse(this.request.url);
+    var u = url.parse(this.injectVariables(this.request.url));
 
     //Fill in the protocol
     if (u.protocol === null) {
       this.request.url = "http://" + this.request.url;
-      u = url.parse(this.request.url);
+      u = url.parse(this.injectVariables(this.request.url));
     }
 
     //Content type header
@@ -285,6 +285,19 @@ angular.module("RestedApp", ['ui.codemirror'])
           headers: item.headers
         };
       }
+  }
+
+  /*
+  Replaces environment variables with their values.
+  */
+  this.injectVariables = function(text) {
+    this.environmentVariablesList.forEach(function(envVar) {
+      let reg = new RegExp(`{${envVar.name}}`, 'g')
+
+      text = text.replace(reg, envVar.value)
+    })
+
+    return text
   }
 
   this.clearHistory = function() {
