@@ -680,12 +680,6 @@ angular.module("RestedApp", ['ui.codemirror'])
                 }
               },
               {
-                label: 'Edit Project Environment Variables...',
-                click: () => {
-                    this.openEnvironmentVariablesDialog();
-                }
-              },
-              {
                 label: 'Close Project',
                 click: () => {
                   this.closeProject(() => {

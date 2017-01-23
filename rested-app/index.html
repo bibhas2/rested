@@ -138,6 +138,9 @@
               </div>
               <div class="toolbar-actions">
                 <div class="btn-group pull-right" ng-if="main.sidebarTab === 'saved'">
+                  <button class="btn btn-default" title="Edit environment variables" ng-click="main.openEnvironmentVariablesDialog()">
+                    <span class="icon icon-doc-text"></span>
+                  </button>
                   <button class="btn btn-default" title="Save current request" ng-click="main.openSaveDialog()">
                     <span class="icon icon-plus"></span>
                   </button>
@@ -146,6 +149,9 @@
                   </button>
                 </div>
                 <div class="btn-group pull-right" ng-if="main.sidebarTab === 'history'">
+                  <button class="btn btn-default" title="Edit environment variables" ng-click="main.openEnvironmentVariablesDialog()">
+                    <span class="icon icon-doc-text"></span>
+                  </button>
                   <button class="btn btn-default" title="Clear" ng-click="main.clearHistory()">
                     <span class="icon icon-trash"></span>
                   </button>
