@@ -186,6 +186,13 @@ angular.module("RestedApp", ['ui.codemirror'])
     //Mark as dirty
     this.project.dirty = true;
 
+    //Inject variables to header values.
+    let headersWithVars = {}
+    
+    Object.keys(this.request.headers).forEach((headerName) => {
+      headersWithVars[headerName] = this.injectVariables(this.request.headers[headerName])
+    })
+
     //Now make the request
     var httpOptions = {
       protocol: u.protocol,
@@ -193,7 +200,7 @@ angular.module("RestedApp", ['ui.codemirror'])
       port: u.port,
       path: u.path,
       method: this.request.method,
-      headers: this.request.headers
+      headers: headersWithVars
     }
 
     this.resetResponseState();
