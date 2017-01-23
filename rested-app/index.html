@@ -280,7 +280,7 @@
 
         <form style="padding: 10px">
           <div class="form-group">
-            <div ng-repeat="h in main.environmentVariablesList">
+            <div ng-repeat="h in main.editableEnvironmentVariables">
               <input type="text" class="form-control header_field" ng-model="h.name" placeholder="Variable name">
               <input type="text" class="form-control header_field" ng-model="h.value" placeholder="Variable value">
               <button class="btn btn-default" title="Delete this variable" ng-click="main.deleteEnvironmentVariable($index)">
@@ -295,7 +295,8 @@
 
         <footer class="toolbar toolbar-footer">
             <div class="toolbar-actions">
-                <button class="btn btn-default pull-right" ng-click="main.closeEnvironmentVariablesDialog()" style="width:50pt">Close</button>
+                <button class="btn btn-default pull-right" ng-click="main.saveEnvironmentVariables()" style="width:50pt">Save</button>
+                <button class="btn btn-default pull-right" ng-click="main.closeEnvironmentVariablesDialog()" style="width:50pt">Cancel</button>
             </div>
         </footer>
     </dialog>

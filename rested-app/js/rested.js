@@ -47,7 +47,8 @@ angular.module("RestedApp", ['ui.codemirror'])
     "dirty": false,
     "file": undefined,
     "history": [],
-    "saved": []
+    "saved": [],
+    environmentVariables: []
   };
   this.filteredHistory = undefined;
   this.requestHeaderList = undefined;
@@ -88,7 +89,7 @@ angular.module("RestedApp", ['ui.codemirror'])
   this.ongoingRequest = undefined;
   this.selectedRequest = undefined;
   this.saveRequestName = "";
-  this.environmentVariablesList = [];
+  this.editableEnvironmentVariables = undefined;
 
   var textTypesTable = [
     ["application/xml", "xml"],
@@ -298,7 +299,7 @@ angular.module("RestedApp", ['ui.codemirror'])
   Replaces environment variables with their values.
   */
   this.injectVariables = function(text) {
-    this.environmentVariablesList.forEach(function(envVar) {
+    this.project.environmentVariables.forEach(function(envVar) {
       let reg = new RegExp(`{${envVar.name}}`, 'g')
 
       text = text.replace(reg, envVar.value)
@@ -408,7 +409,7 @@ angular.module("RestedApp", ['ui.codemirror'])
         console.error(err);
       } else {
         //Some properties were added in later versions
-        obj.environmentVariablesList = obj.environmentVariablesList || [];
+        obj.environmentVariables = obj.environmentVariables || [];
 
         this.project = obj;
         this.project.file = file;
@@ -590,7 +591,15 @@ angular.module("RestedApp", ['ui.codemirror'])
 
 
   this.openEnvironmentVariablesDialog = function() {
-    if (this.environmentVariablesList.length == 0) {
+    //Refresh the editable variables list
+    this.editableEnvironmentVariables = this.project.environmentVariables.map((envVar) => {
+      return {
+        name: envVar.name,
+        value: envVar.value
+      };
+    });
+
+    if (this.editableEnvironmentVariables.length == 0) {
       this.addEnvironmentVariable();
     }
 
@@ -598,16 +607,27 @@ angular.module("RestedApp", ['ui.codemirror'])
   }
 
   this.addEnvironmentVariable = function() {
-    this.environmentVariablesList.push({
+    this.editableEnvironmentVariables.push({
       name: "",
       value: ""
     });
   }
 
   this.deleteEnvironmentVariable = function(index) {
-    this.environmentVariablesList.splice(index, 1);
+    this.editableEnvironmentVariables.splice(index, 1);
   }
 
+  this.saveEnvironmentVariables = function() {
+    this.project.environmentVariables = this.editableEnvironmentVariables.map((envVar) => {
+      return {
+        name: envVar.name,
+        value: envVar.value
+      };
+    });
+
+    this.closeEnvironmentVariablesDialog()
+  }
+  
   this.closeEnvironmentVariablesDialog = function() {
     document.getElementById("environmentVariablesDialog").close();
   }
