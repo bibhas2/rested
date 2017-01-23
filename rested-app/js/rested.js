@@ -72,7 +72,7 @@ angular.module("RestedApp", ['ui.codemirror'])
   this.request = {
     url: "",
     body: "",
-    contentType: "",
+    contentType: "application/json",
     method: "GET",
     headers: {},
     cookies: {}
