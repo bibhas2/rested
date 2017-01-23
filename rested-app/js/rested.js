@@ -88,6 +88,7 @@ angular.module("RestedApp", ['ui.codemirror'])
   this.ongoingRequest = undefined;
   this.selectedRequest = undefined;
   this.saveRequestName = "";
+  this.environmentVariablesList = [];
 
   var textTypesTable = [
     ["application/xml", "xml"],
@@ -386,6 +387,9 @@ angular.module("RestedApp", ['ui.codemirror'])
         }
         console.error(err);
       } else {
+        //Some properties were added in later versions
+        obj.environmentVariablesList = obj.environmentVariablesList || [];
+
         this.project = obj;
         this.project.file = file;
         this.project.dirty = false;
@@ -565,6 +569,29 @@ angular.module("RestedApp", ['ui.codemirror'])
   }
 
 
+  this.openEnvironmentVariablesDialog = function() {
+    if (this.environmentVariablesList.length == 0) {
+      this.addEnvironmentVariable();
+    }
+
+    document.getElementById("environmentVariablesDialog").showModal();
+  }
+
+  this.addEnvironmentVariable = function() {
+    this.environmentVariablesList.push({
+      name: "",
+      value: ""
+    });
+  }
+
+  this.deleteEnvironmentVariable = function(index) {
+    this.environmentVariablesList.splice(index, 1);
+  }
+
+  this.closeEnvironmentVariablesDialog = function() {
+    document.getElementById("environmentVariablesDialog").close();
+  }
+
   this.openFormInputDialog = function() {
     if (this.formInputList.length == 0) {
       this.addInputField();
@@ -650,6 +677,12 @@ angular.module("RestedApp", ['ui.codemirror'])
                   } else {
                     this.saveProjectFile();
                   }
+                }
+              },
+              {
+                label: 'Edit Project Environment Variables...',
+                click: () => {
+                    this.openEnvironmentVariablesDialog();
                 }
               },
               {

@@ -267,6 +267,33 @@
         </footer>
     </dialog>
 
+    <dialog id="environmentVariablesDialog" class="header_editor">
+        <header class="toolbar toolbar-header">
+            <h1 class="title">Edit environment variables</h1>
+        </header>
+
+        <form style="padding: 10px">
+          <div class="form-group">
+            <div ng-repeat="h in main.environmentVariablesList">
+              <input type="text" class="form-control header_field" ng-model="h.name" placeholder="Variable name">
+              <input type="text" class="form-control header_field" ng-model="h.value" placeholder="Variable value">
+              <button class="btn btn-default" title="Delete this variable" ng-click="main.deleteEnvironmentVariable($index)">
+                <span class="icon icon-minus"></span>
+              </button>
+            </div>
+            <button class="btn btn-default" style="margin: 4px" title="Add a variable" ng-click="main.addEnvironmentVariable()">
+              <span class="icon icon-plus"></span> Add
+            </button>
+          </div>
+        </form>
+
+        <footer class="toolbar toolbar-footer">
+            <div class="toolbar-actions">
+                <button class="btn btn-default pull-right" ng-click="main.closeEnvironmentVariablesDialog()" style="width:50pt">Cancel</button>
+            </div>
+        </footer>
+    </dialog>
+
     <dialog id="cookieEditorDialog" class="header_editor">
         <header class="toolbar toolbar-header">
             <h1 class="title">Edit cookies</h1>
