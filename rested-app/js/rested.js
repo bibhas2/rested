@@ -299,6 +299,11 @@ angular.module("RestedApp", ['ui.codemirror'])
   Replaces environment variables with their values.
   */
   this.injectVariables = function(text) {
+    if (typeof text !== "string") {
+      //Variable injection works for strings only
+      return text
+    }
+    
     this.project.environmentVariables.forEach(function(envVar) {
       let reg = new RegExp(`{${envVar.name}}`, 'g')
 
