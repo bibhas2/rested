@@ -11,6 +11,10 @@ const BrowserWindow = electron.BrowserWindow;
 let mainWindow;
 
 function createWindow () {
+  //Disable TLS cert validation. This is OK for a developer tool
+  //where self signed certs are often used in development.
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+  
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 1000, height: 800, title:'Boxy'});
 
