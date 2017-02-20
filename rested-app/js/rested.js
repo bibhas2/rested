@@ -305,7 +305,7 @@ angular.module("RestedApp", ['ui.codemirror'])
     }
     
     this.project.environmentVariables.forEach(function(envVar) {
-      let reg = new RegExp(`{${envVar.name}}`, 'g')
+      let reg = new RegExp(`{{${envVar.name}}}`, 'g')
 
       text = text.replace(reg, envVar.value)
     })
