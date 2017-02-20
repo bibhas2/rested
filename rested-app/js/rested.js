@@ -178,7 +178,8 @@ angular.module("RestedApp", ['ui.codemirror'])
       cookies: this.request.cookies,
       contentType: this.request.contentType,
       body: this.request.body,
-      method: this.request.method
+      method: this.request.method,
+      cookies: this.request.cookies
     };
 
     this.project.history.push(historyItem);
@@ -290,7 +291,8 @@ angular.module("RestedApp", ['ui.codemirror'])
           body: item.body,
           contentType: item.contentType,
           method: item.method,
-          headers: item.headers
+          headers: item.headers,
+          cookies: item.cookies
         };
       }
   }
@@ -334,13 +336,29 @@ angular.module("RestedApp", ['ui.codemirror'])
       headers: this.request.headers,
       contentType: this.request.contentType,
       body: this.request.body,
-      method: this.request.method
+      method: this.request.method,
+      cookies: this.request.cookies
     };
 
     this.project.saved.push(savedItem);
     this.project.dirty = true;
 
     this.closeSaveDialog();
+  }
+
+  this.overwriteRequest = function() {
+    if (this.selectedRequest !== undefined) {
+      this.selectedRequest.url = this.request.url;
+      this.selectedRequest.headers = this.request.headers;
+      this.selectedRequest.contentType = this.request.contentType;
+      this.selectedRequest.body = this.request.body;
+      this.selectedRequest.method = this.request.method;
+      this.selectedRequest.cookies = this.request.cookies;
+
+      alert("Request was updated")
+    } else {
+      alert("Please select a request first.")
+    }
   }
 
   this.closeSaveDialog = function() {

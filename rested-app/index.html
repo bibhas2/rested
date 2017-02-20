@@ -141,7 +141,10 @@
                   <button class="btn btn-default" title="Edit environment variables" ng-click="main.openEnvironmentVariablesDialog()">
                     <span class="icon icon-doc-text"></span>
                   </button>
-                  <button class="btn btn-default" title="Save current request" ng-click="main.openSaveDialog()">
+                  <button class="btn btn-default" title="Update selected request" ng-click="main.overwriteRequest()">
+                    <span class="icon icon-floppy"></span>
+                  </button>
+                  <button class="btn btn-default" title="Save as a new request" ng-click="main.openSaveDialog()">
                     <span class="icon icon-plus"></span>
                   </button>
                   <button class="btn btn-default" title="Remove selected request" ng-click="main.removeSelectedSavedRequest()">
@@ -151,6 +154,9 @@
                 <div class="btn-group pull-right" ng-if="main.sidebarTab === 'history'">
                   <button class="btn btn-default" title="Edit environment variables" ng-click="main.openEnvironmentVariablesDialog()">
                     <span class="icon icon-doc-text"></span>
+                  </button>
+                  <button class="btn btn-default" title="Update selected request" ng-click="main.overwriteRequest()">
+                    <span class="icon icon-floppy"></span>
                   </button>
                   <button class="btn btn-default" title="Clear" ng-click="main.clearHistory()">
                     <span class="icon icon-trash"></span>
