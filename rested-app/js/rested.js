@@ -95,6 +95,7 @@ angular.module("RestedApp", ['ui.codemirror'])
     ["application/xml", "xml"],
     ["text/xml", "xml"],
     ["application/json", "javascript"],
+    ["application/hal+json", "javascript"],
     ["text/html", "xml"],
     ["text/json", "javascript"]
   ];
